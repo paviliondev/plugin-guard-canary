@@ -1,0 +1,4 @@
+.env
+screenshots/*
+logs/*
+node_modules

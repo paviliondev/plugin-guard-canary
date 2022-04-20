@@ -1,0 +1,37 @@
+{
+  "name": "plugin-guard-canary",
+  "version": "1.0.0",
+  "description": "Cananry app for the plugin guard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paviliondev/plugin-guard-canary.git"
+  },
+  "author": "Pavilion",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/paviliondev/plugin-guard-canary/issues"
+  },
+  "homepage": "https://github.com/paviliondev/plugin-guard-canary#readme",
+  "dependencies": {
+    "@bull-board/express": "^3.10.3",
+    "bull": "^4.8.1",
+    "chrome-launcher": "^0.15.0",
+    "connect-ensure-login": "^0.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "find-remove": "^4.0.4",
+    "form-data": "^4.0.0",
+    "fs-extra": "^10.1.0",
+    "mailgun.js": "^4.0.0",
+    "passport": "^0.5.2",
+    "passport-github2": "^0.1.12",
+    "passport-local": "^1.0.0",
+    "puppeteer-core": "^13.5.2",
+    "serve-index": "^1.9.1"
+  }
+}
