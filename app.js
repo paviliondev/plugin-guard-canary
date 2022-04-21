@@ -71,7 +71,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+      callbackURL: `${process.env.PROTOCOL}://${process.env.HOSTNAME}/auth/github/callback`
     },
     function(accessToken, refreshToken, profile, done) {
       let error = null;
@@ -123,9 +123,9 @@ app.get('/logout', function(req, res){
 
 app.use('/jobs', ensureLoggedIn({ redirectTo: '/login' }), serverAdapter.getRouter());
 
-const hostname = '127.0.0.1';
+const hostname = process.env.HOSTNAME;
 const port = 3000;
 
 app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  console.log(`Server running at ${process.env.PROTOCOL}://${hostname}:${port}/`);
 });
