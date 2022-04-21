@@ -13,7 +13,7 @@ const mailgunClient = mailgun.client({
 });
 
 const from = 'plugin-guard-canary@pavilion.tech';
-const to = 'angus@pavilion.tech';
+const to = process.env.MAIL_TO;
 
 async function send(url, message, screenshotPath = null) {
   const data = {
