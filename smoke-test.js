@@ -137,7 +137,7 @@ const tests = {
     );
   },
   "wait a little bit": (page, data) => {
-    return page.waitFor(5000);
+    return page.waitForTimeout(5000);
   },
   "submit the reply": (page, data) => {
     let promise = page.click("#reply-control .create");
@@ -167,7 +167,7 @@ const tests = {
     return promise;
   },
   "wait a little bit": (page, data) => {
-    return page.waitFor(5000);
+    return page.waitForTimeout(5000);
   },
   "open composer to edit first post": (page, data) => {
     let promise = page.evaluate(() => {
@@ -187,7 +187,7 @@ const tests = {
     return promise;
   },
   "update post raw in composer": (page, data) => {
-    let promise = page.waitFor(5000);
+    let promise = page.waitForTimeout(5000);
 
     promise = promise.then(() => {
       return page.type(
