@@ -262,6 +262,8 @@ module.exports = async function (data) {
     height: 768
   });
 
+  await page.setDefaultTimeout(60000);
+
   const takeFailureScreenshot = async function() {
     const screenshotPath = `screenshots/smoke-test-${Date.now()}.png`;
     await page.screenshot({ path: screenshotPath, fullPage: true });
