@@ -252,6 +252,11 @@ module.exports = async function (data) {
   const context = await data.browser.createIncognitoBrowserContext();
   const page = await context.newPage();
 
+  await page.authenticate({
+    username: process.env.AUTH_USER,
+    password: process.env.AUTH_PASSWORD
+  });
+
   await page.setViewport({
     width: 1366,
     height: 768
