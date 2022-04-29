@@ -61,7 +61,7 @@ const tests = {
     return page.waitForSelector(".topic-post", { visible: true });
   },
   "click on the 1st user": (page, data) => {
-    return page.click(".topic-meta-data a:first-of-type");
+    return page.click(".topic-post .topic-meta-data a:first-of-type");
   },
   "user has details": (page, data) => {
     return page.waitForSelector(".user-card .names", { visible: true });
@@ -97,7 +97,7 @@ const tests = {
     });
   },
   "compose new topic": (page, data) => {
-    const date = `(${+new Date()})`;
+    const date = `(${Date.now()})`;
     const title = `This is a new topic ${date}`;
     const post = `I can write a new topic inside the smoke test! ${date} \n\n`;
 
@@ -127,7 +127,7 @@ const tests = {
     });
   },
   "compose reply": (page, data) => {
-    const post = `I can even write a reply inside the smoke test ;) (${+new Date()})`;
+    const post = `I can even write a reply inside the smoke test ;) (${Date.now()})`;
     return page.type("#reply-control .d-editor-input", post);
   },
   "waiting for the preview": (page, data) => {
@@ -229,7 +229,7 @@ const tests = {
     return page.goto(path.join(data.url, "admin"));
   },
   "expect the dashboard to appear": (page, data) => {
-    return page.waitForSelector(".admin.dashboard", { visible: true });
+    return page.waitForSelector(".admin-contents.dashboard", { visible: true });
   },
   "go to admin plugins panel": (page, data) => {
     return page.goto(path.join(data.url, "admin", "plugins"));
@@ -262,7 +262,7 @@ module.exports = async function (data) {
     height: 768
   });
 
-  await page.setDefaultTimeout(60000);
+  await page.setDefaultTimeout(100000);
 
   const takeFailureScreenshot = async function() {
     const screenshotPath = `screenshots/smoke-test-${Date.now()}.png`;
@@ -288,13 +288,13 @@ module.exports = async function (data) {
     return resp;
   });
 
-  const exec = (description, fn) => {
-    const start = +new Date();
-
+  const exec = async (description, fn) => {
+    const start = Date.now();
+    await page.waitForTimeout(1000);
     return fn
       .call(null, page, data)
       .then(async output => {
-        let message = `PASSED: ${description} - ${+new Date() - start}ms`;
+        let message = `PASSED: ${description} - ${Date.now() - start}ms`;
         return {
           url: data.url,
           success: true,
@@ -302,7 +302,7 @@ module.exports = async function (data) {
         };
       })
       .catch(async error => {
-        let message = `ERROR (${description}): ${error.message} - ${+new Date() - start}ms`;
+        let message = `ERROR (${description}): ${error.message} - ${Date.now() - start}ms`;
         let screenshotPath = await takeFailureScreenshot();
         return {
           url: data.url,
