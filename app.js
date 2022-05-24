@@ -15,34 +15,40 @@ const path = require("path");
 
 // Setup queues.
 const smokeTestQueue = new Queue('smoke test');
-path.resolve( __dirname, "./updater.js" )
-smokeTestQueue.process(path.resolve( __dirname, "./smoke-test-handler.js" ));
-smokeTestQueue.add(
-  {
-    url: "https://stable.plugins.discourse.pavilion.tech",
-    username: process.env.STABLE_DISCOURSE_USERNAME,
-    password: process.env.STABLE_DISCOURSE_PASSWORD
+smokeTestQueue.process("*", path.resolve( __dirname, "./smoke-test-handler.js" ));
+
+const stableData = {
+  url: "https://stable.plugins.discourse.pavilion.tech",
+  username: process.env.STABLE_DISCOURSE_USERNAME,
+  password: process.env.STABLE_DISCOURSE_PASSWORD
+};
+const testsPassedData = {
+  url: "https://tests-passed.plugins.discourse.pavilion.tech",
+  username: process.env.TESTS_PASSED_DISCOURSE_USERNAME,
+  password: process.env.TESTS_PASSED_DISCOURSE_PASSWORD
+};
+const stableJobOpts = {
+  attempts: 3,
+  timeout: 600000,
+  repeat: {
+    cron: '15 3 * * *'
   },
-  {
-    repeat: {
-      cron: '15 3 * * *'
-    },
-    jobId: "stable-smoke-test"
-  }
-);
-smokeTestQueue.add(
-  {
-    url: "https://tests-passed.plugins.discourse.pavilion.tech",
-    username: process.env.TESTS_PASSED_DISCOURSE_USERNAME,
-    password: process.env.TESTS_PASSED_DISCOURSE_PASSWORD
+  jobId: "stable-smoke-test"
+};
+const testsPassedJobOpts = {
+  attempts: 3,
+  timeout: 600000,
+  repeat: {
+    cron: '15 3 * * *'
   },
-  {
-    repeat: {
-      cron: '15 3 * * *'
-    },
-    jobId: "tests-passed-smoke-test"
-  }
-);
+  jobId: "tests-passed-smoke-test"
+};
+
+smokeTestQueue.getRepeatableJobs().then((jobs) => {
+  jobs.forEach((job) => (smokeTestQueue.removeRepeatable(job)));
+  smokeTestQueue.add("stable", stableData, stableJobOpts);
+  smokeTestQueue.add("tests-passed", testsPassedData, testsPassedJobOpts);
+});
 
 const serverAdapter = new ExpressAdapter();
 const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
